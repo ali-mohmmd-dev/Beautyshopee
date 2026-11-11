@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
 import { CATALOG, searchProducts } from "../catalog";
 import { useShop } from "../shop-provider";
@@ -7,6 +9,15 @@ import { ProductCard } from "./product-card";
 
 export function ProductListing() {
   const { query, setQuery } = useShop();
+  const searchParams = useSearchParams();
+  const urlQuery = searchParams?.get("q") ?? null;
+
+  useEffect(() => {
+    if (urlQuery !== null) {
+      setQuery(urlQuery);
+    }
+  }, [urlQuery, setQuery]);
+
   const products = searchProducts(CATALOG, query);
 
   return (

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { ProductListing } from "@/features/storefront/components/product-listing";
 
 export const metadata: Metadata = {
@@ -8,8 +9,8 @@ export const metadata: Metadata = {
 
 export default function ProductsPage() {
   return (
-    <>
+    <Suspense>
       <ProductListing />
-    </>
+    </Suspense>
   );
 }

@@ -56,4 +56,20 @@ describe("Product pages", () => {
     const cart = within(screen.getByRole("dialog", { name: "Cart" }));
     expect(cart.getByText("Cart (2)")).toBeInTheDocument();
   });
+
+  it("filters products when clicking a category slider link", () => {
+    render(
+      <StorefrontShell>
+        <ProductsPage />
+      </StorefrontShell>,
+    );
+
+    const nav = screen.getByRole("navigation", { name: "Category navigation slider" });
+    const faceLink = within(nav).getByRole("link", { name: /Face/i });
+    expect(faceLink).toHaveAttribute("href", "/products?q=face");
+
+    fireEvent.click(faceLink);
+    expect(screen.getByRole("status")).toHaveTextContent("4 products");
+    expect(screen.getByRole("searchbox", { name: "Filter products" })).toHaveValue("face");
+  });
 });

@@ -351,8 +351,10 @@ export function getProduct(id: string) {
 export function searchProducts(products: Product[], query: string) {
   const term = query.trim().toLowerCase();
   return term
-    ? products.filter(({ name, code, description }) =>
-        `${name} ${code} ${description}`.toLowerCase().includes(term),
+    ? products.filter(({ name, code, description, categories, tag, brand }) =>
+        `${name} ${code} ${description} ${categories.join(" ")} ${tag ?? ""} ${brand ?? ""}`
+          .toLowerCase()
+          .includes(term),
       )
     : products;
 }
