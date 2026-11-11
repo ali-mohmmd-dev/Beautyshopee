@@ -70,7 +70,10 @@ export function ProductCard({
               {product.name}
             </Link>
           </h3>
-          <p className="mt-1 text-[11px] text-muted-foreground">{product.code}</p>
+          <p className="mt-1 text-[11px] text-muted-foreground">
+            {product.code}
+            {product.sampleProduct && " · Sample product"}
+          </p>
         </div>
         <p className="text-sm">{inr(product.price)}</p>
       </div>

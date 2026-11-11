@@ -53,6 +53,7 @@ export default async function ProductPage({ params }: Props) {
         <section className="lg:py-8">
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
             {product.code}
+            {product.sampleProduct && " · Sample product"}
             {product.tag && ` · ${product.tag === "NEW" ? "New" : "Bestseller"}`}
           </p>
           <h1 className="mt-2 font-display text-3xl font-medium sm:mt-4 sm:text-6xl">

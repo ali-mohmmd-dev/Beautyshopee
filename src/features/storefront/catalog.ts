@@ -28,6 +28,7 @@ export type Product = {
   code: string;
   brand?: string;
   sampleBrand?: boolean;
+  sampleProduct?: boolean;
   categories: readonly ProductCategory[];
   reviews?: readonly ProductReview[];
   description: string;
@@ -59,6 +60,13 @@ export const PRODUCTS: Product[] = [
         rating: 4,
         text: "I preferred applying it with a fluffy brush for a softer finish.",
       },
+      {
+        id: "sample-blush-collection-3",
+        author: "Example reviewer 3",
+        sample: true,
+        rating: 5,
+        text: "A light layer gave me enough colour for daytime.",
+      },
     ],
     name: "Blush Collection",
     tag: "BESTSELLER",
@@ -80,6 +88,20 @@ export const PRODUCTS: Product[] = [
         sample: true,
         rating: 5,
         text: "The three pieces made it easy to put together a simple look for work.",
+      },
+      {
+        id: "sample-everyday-trio-2",
+        author: "Example reviewer 2",
+        sample: true,
+        rating: 4,
+        text: "The set was easy to carry in my makeup bag.",
+      },
+      {
+        id: "sample-everyday-trio-3",
+        author: "Example reviewer 3",
+        sample: true,
+        rating: 5,
+        text: "I used all three pieces for a quick morning routine.",
       },
     ],
     name: "Everyday Trio",
@@ -109,6 +131,13 @@ export const PRODUCTS: Product[] = [
         rating: 4,
         text: "I liked the shine and reapplied after lunch.",
       },
+      {
+        id: "sample-silk-lip-oil-3",
+        author: "Example reviewer 3",
+        sample: true,
+        rating: 4,
+        text: "I liked wearing it on its own when I wanted a little shine.",
+      },
     ],
     name: "Silk Lip Oil",
     tag: null,
@@ -130,6 +159,20 @@ export const PRODUCTS: Product[] = [
         sample: true,
         rating: 4,
         text: "A handy set of basics for a quick face and eye routine.",
+      },
+      {
+        id: "sample-must-haves-2",
+        author: "Example reviewer 2",
+        sample: true,
+        rating: 5,
+        text: "The face and eye basics were easy to use together.",
+      },
+      {
+        id: "sample-must-haves-3",
+        author: "Example reviewer 3",
+        sample: true,
+        rating: 4,
+        text: "It was a useful starting point for my everyday makeup.",
       },
     ],
     name: "The Must-Haves",
@@ -161,6 +204,13 @@ export const BUNDLE = {
       rating: 4,
       text: "The blush and lip oil were the pieces I reached for most often.",
     },
+    {
+      id: "sample-essentials-kit-3",
+      author: "Example reviewer 3",
+      sample: true,
+      rating: 4,
+      text: "The shades were easy to pair for a simple daytime look.",
+    },
   ],
   name: "The Essentials Kit",
   tag: null,
@@ -181,7 +231,118 @@ export const BUNDLE = {
   },
 } satisfies Product;
 
-export const CATALOG: Product[] = [...PRODUCTS, BUNDLE];
+const SAMPLE_PRODUCTS: Product[] = [
+  {
+    id: "rose-cloud-blush",
+    name: "Rose Cloud Blush",
+    brand: "Petal & Tint",
+    sampleBrand: true,
+    sampleProduct: true,
+    tag: null,
+    code: "RCB-05 · Cheeks",
+    categories: ["face"],
+    description: "A rose-toned blush for adding a soft wash of colour to the cheeks.",
+    price: 749,
+    reviews: [
+      {
+        id: "sample-rose-cloud-blush-1",
+        author: "Example reviewer 1",
+        sample: true,
+        rating: 5,
+        text: "The rose shade worked nicely with my everyday makeup.",
+      },
+      {
+        id: "sample-rose-cloud-blush-2",
+        author: "Example reviewer 2",
+        sample: true,
+        rating: 4,
+        text: "I got a softer finish when I applied it in light layers.",
+      },
+      {
+        id: "sample-rose-cloud-blush-3",
+        author: "Example reviewer 3",
+        sample: true,
+        rating: 5,
+        text: "I liked pairing it with a neutral lip.",
+      },
+    ],
+    image: faceImg,
+  },
+  {
+    id: "berry-glaze-lip-tint",
+    name: "Berry Glaze Lip Tint",
+    brand: "Petal & Tint",
+    sampleBrand: true,
+    sampleProduct: true,
+    tag: null,
+    code: "BGT-06 · Lips",
+    categories: ["lips"],
+    description: "A berry-toned lip tint for a sheer wash of colour.",
+    price: 599,
+    reviews: [
+      {
+        id: "sample-berry-glaze-lip-tint-1",
+        author: "Example reviewer 1",
+        sample: true,
+        rating: 5,
+        text: "One swipe gave me the sheer berry look I wanted.",
+      },
+      {
+        id: "sample-berry-glaze-lip-tint-2",
+        author: "Example reviewer 2",
+        sample: true,
+        rating: 4,
+        text: "The colour was easy to build up in the centre of my lips.",
+      },
+      {
+        id: "sample-berry-glaze-lip-tint-3",
+        author: "Example reviewer 3",
+        sample: true,
+        rating: 4,
+        text: "I liked it with a little balm underneath.",
+      },
+    ],
+    image: lipsImg,
+  },
+  {
+    id: "soft-definition-mascara",
+    name: "Soft Definition Mascara",
+    brand: "Studio Daylight",
+    sampleBrand: true,
+    sampleProduct: true,
+    tag: null,
+    code: "SDM-07 · Eyes",
+    categories: ["eyes"],
+    description: "A black mascara for an understated everyday lash look.",
+    price: 699,
+    reviews: [
+      {
+        id: "sample-soft-definition-mascara-1",
+        author: "Example reviewer 1",
+        sample: true,
+        rating: 5,
+        text: "One coat gave me enough definition for daytime.",
+      },
+      {
+        id: "sample-soft-definition-mascara-2",
+        author: "Example reviewer 2",
+        sample: true,
+        rating: 4,
+        text: "I preferred the look after combing through my lashes.",
+      },
+      {
+        id: "sample-soft-definition-mascara-3",
+        author: "Example reviewer 3",
+        sample: true,
+        rating: 5,
+        text: "It paired well with a simple neutral eyeshadow.",
+      },
+    ],
+    image: eyesImg,
+  },
+];
+
+export const CATALOG: Product[] = [...PRODUCTS, BUNDLE, ...SAMPLE_PRODUCTS];
 
 export function getProduct(id: string) {
   return CATALOG.find((product) => product.id === id);

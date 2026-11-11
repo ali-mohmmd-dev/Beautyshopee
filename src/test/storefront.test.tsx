@@ -39,15 +39,14 @@ describe("Product pages", () => {
       </StorefrontShell>,
     );
 
-    expect(screen.getByRole("status")).toHaveTextContent("5 products");
+    expect(screen.getByRole("status")).toHaveTextContent("8 products");
     fireEvent.change(screen.getByRole("searchbox", { name: "Filter products" }), {
       target: { value: "silk lip oil" },
     });
     expect(screen.getByRole("status")).toHaveTextContent("1 product");
-    expect(within(screen.getByRole("main")).getByRole("link", { name: "Silk Lip Oil" })).toHaveAttribute(
-      "href",
-      "/products/silk-lip-oil",
-    );
+    expect(
+      within(screen.getByRole("main")).getByRole("link", { name: "Silk Lip Oil" }),
+    ).toHaveAttribute("href", "/products/silk-lip-oil");
     fireEvent.click(screen.getByRole("button", { name: "Quick add" }));
 
     rerender(<StorefrontShell>{detailPage}</StorefrontShell>);
