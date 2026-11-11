@@ -14,7 +14,13 @@ function Stars({ count, total = 5 }: { count: number; total?: number }) {
 
 const MARQUEE_HALF = [...REVIEWS, ...REVIEWS];
 
-function ReviewCard({ review, hidden = false }: { review: (typeof REVIEWS)[number]; hidden?: boolean }) {
+function ReviewCard({
+  review,
+  hidden = false,
+}: {
+  review: (typeof REVIEWS)[number];
+  hidden?: boolean;
+}) {
   return (
     <figure
       aria-hidden={hidden || undefined}
@@ -54,7 +60,7 @@ export function Reviews() {
           </div>
         </div>
 
-        <div className="mt-6 overflow-visible sm:mt-12">
+        <div className="mt-6 overflow-visible motion-reduce:overflow-x-auto sm:mt-12">
           <div className="flex w-max animate-marquee">
             <div className="flex shrink-0 gap-4 pr-4 sm:gap-6 sm:pr-6">
               {MARQUEE_HALF.map((review, index) => (
