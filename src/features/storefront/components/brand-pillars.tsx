@@ -22,10 +22,10 @@ const PILLARS = [
 
 export function BrandPillars() {
   return (
-    <section className="bg-card">
-      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-4 gap-y-6 px-4 py-8 sm:gap-0 sm:p-0 lg:grid-cols-4">
+    <section className="bg-card py-10 sm:pt-6 sm:pt-20 lg:pt-28">
+      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-4 gap-y-6 px-4 sm:gap-0 sm:p-0 lg:grid-cols-4">
         {PILLARS.map((pillar) => (
-          <div key={pillar.title} className="sm:py-16">
+          <div key={pillar.title} className="">
             <div className="border-l pl-3 hairline sm:px-8">
               <h3 className="text-sm font-semibold sm:mt-4 sm:text-xs">{pillar.title}</h3>
               <p className="mt-2 text-sm font-light leading-[1.4] text-muted-foreground sm:mt-3">

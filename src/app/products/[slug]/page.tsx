@@ -5,7 +5,8 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, MapPin, Truck } from "lucide-react";
 import { CATALOG, getProduct, inr, type Product } from "@/features/storefront/catalog";
 import { ProductActions } from "@/features/storefront/components/product-actions";
-import { ProductCard } from "@/features/storefront/components/product-card";
+import { ProductReviews } from "@/features/storefront/components/product-reviews";
+import { ProductSlider } from "@/features/storefront/components/product-slider";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -100,31 +101,11 @@ export default async function ProductPage({ params }: Props) {
         <h2 id="product-reviews-title" className="font-display text-3xl font-medium sm:text-4xl">
           Product reviews
         </h2>
-        {reviews.length ? (
-          <ul className="mt-4 divide-y hairline">
-            {reviews.map(({ id, author, rating, text, sample }) => (
-              <li key={id} className="space-y-2 py-4">
-                <p className="text-sm font-medium">
-                  {author} · {rating}/5 stars
-                  {sample && (
-                    <span className="ml-2 text-xs text-muted-foreground">Sample review</span>
-                  )}
-                </p>
-                <p className="text-sm text-muted-foreground">{text}</p>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="mt-3 text-sm text-muted-foreground">No reviews for this product yet.</p>
-        )}
+        <ProductReviews reviews={reviews} />
       </section>
       <ProductRecommendations
         id="same-brand-title"
-        title={
-          product.brand
-            ? `More from ${product.brand}${product.sampleBrand ? " (sample brand)" : ""}`
-            : "More from the same brand"
-        }
+        title={"More from the same brand"}
         products={sameBrand}
         emptyMessage="Same-brand recommendations are currently unavailable for this product."
       />
@@ -158,15 +139,7 @@ function ProductRecommendations({
         {title}
       </h2>
       {products.length ? (
-        <div className="mt-7 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6">
-          {products.map((item) => (
-            <ProductCard
-              key={item.id}
-              product={item}
-              sizes="(min-width: 1280px) 395px, (min-width: 640px) 33vw, 50vw"
-            />
-          ))}
-        </div>
+        <ProductSlider products={products} />
       ) : (
         <p className="mt-3 text-sm text-muted-foreground">{emptyMessage}</p>
       )}

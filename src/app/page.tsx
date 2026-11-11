@@ -5,6 +5,7 @@ import { CategoryGrid } from "@/features/storefront/components/category-grid";
 import { CategorySlider } from "@/features/storefront/components/category-slider";
 import { EditorialSpotlight } from "@/features/storefront/components/editorial-spotlight";
 import { Hero } from "@/features/storefront/components/hero";
+import { PopularBrands } from "@/features/storefront/components/popular-brands";
 import { ProductCarousel } from "@/features/storefront/components/product-carousel";
 import { Reviews } from "@/features/storefront/components/reviews";
 import { VisitSection } from "@/features/storefront/components/visit-section";
@@ -36,8 +37,9 @@ export default function HomePage() {
       <CategoryGrid />
       <ProductCarousel />
       <EditorialSpotlight />
-      <BrandPillars />
+      <PopularBrands />
       <BundleShowcase />
+      <BrandPillars />
       <Reviews />
       <VisitSection />
     </>

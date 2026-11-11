@@ -17,7 +17,7 @@ export function ProductListing() {
       <div className="flex flex-wrap items-end justify-between gap-4 border-b hairline pb-4 sm:gap-6 sm:pb-6">
         <div>
           <h1 id="catalog-title" className="font-display text-3xl font-medium">
-            Shop the edit
+            Shop the products
           </h1>
           <p role="status" className="mt-2 text-xs text-muted-foreground">
             {products.length} {products.length === 1 ? "product" : "products"}

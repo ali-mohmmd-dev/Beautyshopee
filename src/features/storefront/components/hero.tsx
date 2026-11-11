@@ -34,7 +34,7 @@ export function Hero() {
             href="/products"
             className="mt-4 inline-flex min-h-11 items-center gap-2 bg-background px-5 py-3 text-sm font-medium text-foreground transition-all duration-300 hover:bg-background/90 sm:mt-6 sm:min-h-0 sm:px-6 sm:text-xs"
           >
-            Explore the edit
+            Explore the products
             <ArrowDownRight size={14} aria-hidden="true" />
           </Link>
         </div>

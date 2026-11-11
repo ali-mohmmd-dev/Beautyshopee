@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: { default: title, template: `%s — ${title}` },
   description,
   authors: [{ name: title }],
+  icons: { icon: { url: "/beauty-shoppee-logo.png", type: "image/png" } },
   openGraph: { title, description, type: "website" },
   twitter: { card: "summary_large_image" },
 };
