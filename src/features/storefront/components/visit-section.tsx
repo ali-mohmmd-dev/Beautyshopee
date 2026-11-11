@@ -3,7 +3,7 @@ import { STORE } from "../store-info";
 
 export function VisitSection() {
   return (
-    <section id="visit" className="border-t hairline bg-card" aria-labelledby="visit-title">
+    <section id="visit" className="border-t hairline bg-background" aria-labelledby="visit-title">
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-20 lg:py-28">
         <div className="grid gap-6 sm:gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="flex flex-col justify-center">

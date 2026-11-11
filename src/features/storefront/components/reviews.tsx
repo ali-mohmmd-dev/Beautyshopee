@@ -43,7 +43,7 @@ function ReviewCard({
 
 export function Reviews() {
   return (
-    <section id="reviews" className="overflow-x-clip  bg-card">
+    <section id="reviews" className="overflow-x-clip bg-background">
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-20 lg:py-28">
         <div className="flex flex-wrap items-end justify-between gap-3 sm:gap-8">
           <div>

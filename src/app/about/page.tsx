@@ -17,7 +17,7 @@ export default function AboutPage() {
   return (
     <>
       <section className="grid border-b hairline lg:grid-cols-2">
-        <div className="flex flex-col items-start justify-center bg-secondary/60 px-4 py-10 sm:px-12 sm:py-16 lg:px-16 lg:py-24">
+        <div className="flex flex-col items-start justify-center bg-background px-4 py-10 sm:px-12 sm:py-16 lg:px-16 lg:py-24">
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
             About Beauty Shoppee
           </p>

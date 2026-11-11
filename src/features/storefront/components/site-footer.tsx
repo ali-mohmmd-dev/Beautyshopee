@@ -32,7 +32,7 @@ const LINKS = [
 
 export function SiteFooter() {
   return (
-    <footer className="bg-card">
+    <footer className="bg-background">
       <div className="grid grid-cols-4 sm:grid-cols-8">
         {STRIP.map((thumb) => (
           <Image

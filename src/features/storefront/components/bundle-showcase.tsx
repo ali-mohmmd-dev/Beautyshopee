@@ -22,7 +22,7 @@ export function BundleShowcase() {
           />
         </ParallaxImage>
       </div>
-      <div className="flex flex-col justify-center bg-card px-4 py-10 sm:px-12 sm:py-16 lg:px-16">
+      <div className="flex flex-col justify-center bg-background px-4 py-10 sm:px-12 sm:py-16 lg:px-16">
         <h2 className="font-display text-3xl font-medium sm:text-5xl">
           <Link
             href={`/products/${BUNDLE.id}`}

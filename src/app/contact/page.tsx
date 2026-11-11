@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
-      <section className="bg-secondary/60">
+      <section className="bg-background">
         <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-16 lg:py-24">
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
             Beauty Shoppee Tirur
@@ -25,7 +25,7 @@ export default function ContactPage() {
         </div>
       </section>
       <VisitSection />
-      <section aria-labelledby="contact-questions" className="border-t hairline bg-secondary/50">
+      <section aria-labelledby="contact-questions" className="border-t hairline bg-background">
         <div className="mx-auto grid max-w-7xl gap-5 sm:gap-8 px-4 py-10 sm:px-6 sm:py-16 lg:grid-cols-2 lg:py-20">
           <h2 id="contact-questions" className="font-display text-4xl font-medium">
             Before you visit

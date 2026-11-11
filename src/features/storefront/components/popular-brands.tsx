@@ -48,7 +48,7 @@ export function PopularBrands() {
   }
 
   return (
-    <section aria-labelledby="popular-brands-title" className="bg-card py-10 sm:py-20 lg:py-28">
+    <section aria-labelledby="popular-brands-title" className="bg-background py-10 sm:py-20 lg:py-28">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 sm:px-6">
         <h2 id="popular-brands-title" className="font-display text-3xl font-medium sm:text-5xl">
           Popular brands

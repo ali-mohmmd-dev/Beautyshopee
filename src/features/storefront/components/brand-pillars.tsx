@@ -22,7 +22,7 @@ const PILLARS = [
 
 export function BrandPillars() {
   return (
-    <section className="bg-card py-10 sm:pt-6 sm:pt-20 lg:pt-28">
+    <section className="bg-background py-10 sm:pt-6 sm:pt-20 lg:pt-28">
       <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-4 gap-y-6 px-4 sm:gap-0 sm:p-0 lg:grid-cols-4">
         {PILLARS.map((pillar) => (
           <div key={pillar.title} className="">
@@ -44,7 +44,7 @@ export function OffersBand() {
     <aside
       id="offers"
       aria-label="Shopping information"
-      className="border-b hairline bg-secondary/60"
+      className="border-b hairline bg-background"
     >
       <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-4 text-xs text-foreground/80 sm:px-6">
         <span className="flex items-center gap-2">
