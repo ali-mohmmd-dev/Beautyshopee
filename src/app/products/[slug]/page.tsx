@@ -101,10 +101,13 @@ export default async function ProductPage({ params }: Props) {
         </h2>
         {reviews.length ? (
           <ul className="mt-4 divide-y hairline">
-            {reviews.map(({ id, author, rating, text }) => (
+            {reviews.map(({ id, author, rating, text, sample }) => (
               <li key={id} className="space-y-2 py-4">
                 <p className="text-sm font-medium">
                   {author} · {rating}/5 stars
+                  {sample && (
+                    <span className="ml-2 text-xs text-muted-foreground">Sample review</span>
+                  )}
                 </p>
                 <p className="text-sm text-muted-foreground">{text}</p>
               </li>
@@ -116,7 +119,11 @@ export default async function ProductPage({ params }: Props) {
       </section>
       <ProductRecommendations
         id="same-brand-title"
-        title={product.brand ? `More from ${product.brand}` : "More from the same brand"}
+        title={
+          product.brand
+            ? `More from ${product.brand}${product.sampleBrand ? " (sample brand)" : ""}`
+            : "More from the same brand"
+        }
         products={sameBrand}
         emptyMessage="Same-brand recommendations are currently unavailable for this product."
       />

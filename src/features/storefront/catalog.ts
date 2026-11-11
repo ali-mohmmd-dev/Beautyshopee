@@ -14,6 +14,7 @@ import lipOilImg from "@/assets/product-lip.jpg";
 export type ProductReview = {
   id: string;
   author: string;
+  sample?: boolean;
   rating: 1 | 2 | 3 | 4 | 5;
   text: string;
 };
@@ -26,6 +27,7 @@ export type Product = {
   tag: "NEW" | "BESTSELLER" | null;
   code: string;
   brand?: string;
+  sampleBrand?: boolean;
   categories: readonly ProductCategory[];
   reviews?: readonly ProductReview[];
   description: string;
@@ -40,6 +42,24 @@ export type Product = {
 export const PRODUCTS: Product[] = [
   {
     id: "blush-collection",
+    brand: "Petal & Tint",
+    sampleBrand: true,
+    reviews: [
+      {
+        id: "sample-blush-collection-1",
+        author: "Example reviewer 1",
+        sample: true,
+        rating: 5,
+        text: "The colour builds gradually, so it was easy to go from a soft flush to a stronger look.",
+      },
+      {
+        id: "sample-blush-collection-2",
+        author: "Example reviewer 2",
+        sample: true,
+        rating: 4,
+        text: "I preferred applying it with a fluffy brush for a softer finish.",
+      },
+    ],
     name: "Blush Collection",
     tag: "BESTSELLER",
     code: "BLS-01 · Cheeks",
@@ -51,6 +71,17 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "everyday-trio",
+    brand: "Studio Daylight",
+    sampleBrand: true,
+    reviews: [
+      {
+        id: "sample-everyday-trio-1",
+        author: "Example reviewer 1",
+        sample: true,
+        rating: 5,
+        text: "The three pieces made it easy to put together a simple look for work.",
+      },
+    ],
     name: "Everyday Trio",
     tag: "NEW",
     code: "TRY-02 · Daily",
@@ -61,6 +92,24 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "silk-lip-oil",
+    brand: "Petal & Tint",
+    sampleBrand: true,
+    reviews: [
+      {
+        id: "sample-silk-lip-oil-1",
+        author: "Example reviewer 1",
+        sample: true,
+        rating: 5,
+        text: "The peach tint is subtle and looks good layered over lip colour.",
+      },
+      {
+        id: "sample-silk-lip-oil-2",
+        author: "Example reviewer 2",
+        sample: true,
+        rating: 4,
+        text: "I liked the shine and reapplied after lunch.",
+      },
+    ],
     name: "Silk Lip Oil",
     tag: null,
     code: "LIP-03 · Lips",
@@ -72,6 +121,17 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "must-haves",
+    brand: "Studio Daylight",
+    sampleBrand: true,
+    reviews: [
+      {
+        id: "sample-must-haves-1",
+        author: "Example reviewer 1",
+        sample: true,
+        rating: 4,
+        text: "A handy set of basics for a quick face and eye routine.",
+      },
+    ],
     name: "The Must-Haves",
     tag: "BESTSELLER",
     code: "MSN-04 · Face",
@@ -84,6 +144,24 @@ export const PRODUCTS: Product[] = [
 
 export const BUNDLE = {
   id: "essentials-kit",
+  brand: "Studio Daylight",
+  sampleBrand: true,
+  reviews: [
+    {
+      id: "sample-essentials-kit-1",
+      author: "Example reviewer 1",
+      sample: true,
+      rating: 5,
+      text: "I liked having the cheek, lip, and eye products together in one kit.",
+    },
+    {
+      id: "sample-essentials-kit-2",
+      author: "Example reviewer 2",
+      sample: true,
+      rating: 4,
+      text: "The blush and lip oil were the pieces I reached for most often.",
+    },
+  ],
   name: "The Essentials Kit",
   tag: null,
   code: "Makeup set",
