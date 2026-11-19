@@ -1,11 +1,20 @@
+"use client";
+
+import { useSectionContent } from "../cms-context";
 import { Star } from "lucide-react";
 import type { ProductReview } from "../catalog";
 
 const RATINGS = [5, 4, 3, 2, 1] as const;
 
 export function ProductReviews({ reviews }: { reviews: readonly ProductReview[] }) {
+  const content = useSectionContent("product-reviews");
+
   if (!reviews.length) {
-    return <p className="mt-3 text-sm text-muted-foreground">No reviews for this product yet.</p>;
+    return (
+      <p className="mt-3 text-sm text-muted-foreground">
+        {content.text("text-0", "No reviews for this product yet.")}
+      </p>
+    );
   }
 
   const average = reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length;
@@ -14,14 +23,17 @@ export function ProductReviews({ reviews }: { reviews: readonly ProductReview[] 
     <div className="mt-5 grid items-start gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-6">
       <div className="border bg-card p-4 hairline sm:p-6">
         <div className="flex items-center gap-2 font-display text-4xl font-medium">
-          <span className="sr-only">Average rating out of 5</span>
+          <span className="sr-only">{content.text("text-1", "Average rating out of 5")}</span>
           {average.toFixed(1)}
           <Star aria-hidden="true" className="size-6 fill-current" />
         </div>
         <p className="mt-1 text-sm text-muted-foreground">
           {reviews.length} {reviews.length === 1 ? "review" : "reviews"}
         </p>
-        <ul aria-label="Ratings breakdown" className="mt-4 space-y-3 border-t pt-4 hairline">
+        <ul
+          aria-label={content.text("aria-label-2", "Ratings breakdown")}
+          className="mt-4 space-y-3 border-t pt-4 hairline"
+        >
           {RATINGS.map((rating) => {
             const count = reviews.filter((review) => review.rating === rating).length;
 
@@ -49,7 +61,7 @@ export function ProductReviews({ reviews }: { reviews: readonly ProductReview[] 
           })}
         </ul>
       </div>
-      <ul aria-label="Customer reviews" className="grid gap-3">
+      <ul aria-label={content.text("aria-label-3", "Customer reviews")} className="grid gap-3">
         {reviews.map(({ id, author, rating, text, sample }) => {
           const initials = author
             .trim()
@@ -70,7 +82,11 @@ export function ProductReviews({ reviews }: { reviews: readonly ProductReview[] 
                   </span>
                   <div className="min-w-0">
                     <p className="break-words text-sm font-medium">{author}</p>
-                    {sample && <span className="text-xs text-muted-foreground">Sample review</span>}
+                    {sample && (
+                      <span className="text-xs text-muted-foreground">
+                        {content.text("text-4", "Sample review")}
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="shrink-0 text-right">
@@ -85,7 +101,7 @@ export function ProductReviews({ reviews }: { reviews: readonly ProductReview[] 
                     ))}
                   </span>
                   <span className="mt-1 block text-xs font-medium">
-                    {rating}/5 <span className="sr-only">stars</span>
+                    {rating}/5 <span className="sr-only">{content.text("text-5", "stars")}</span>
                   </span>
                 </div>
               </div>

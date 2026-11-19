@@ -1,3 +1,7 @@
+import { getCms } from "@/lib/cms";
+import { toProduct } from "@/features/storefront/cms-product";
+import { VariantPicker } from "@/features/storefront/components/variant-picker";
+import { DescriptionText } from "@/features/storefront/components/description-text";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,21 +14,45 @@ import { ProductSlider } from "@/features/storefront/components/product-slider";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
   return CATALOG.map(({ id }) => ({ slug: id }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const product = getProduct((await params).slug);
+  const slug = (await params).slug;
+  const records = await getCms();
+  const record = records.find((item) => item.kind === "products" && item.slug === slug);
+  const product = records.length
+    ? record
+      ? toProduct(record, records)
+      : undefined
+    : getProduct(slug);
   if (!product) notFound();
-  return { title: product.name, description: product.description };
+  const seo = record?.data["seo"];
+  return {
+    title: { absolute: seo?.title || product.name },
+    description: seo?.description || product.description,
+    alternates: seo?.canonical ? { canonical: seo.canonical } : undefined,
+    robots: seo?.noIndex ? { index: false, follow: true } : undefined,
+    openGraph: {
+      title: seo?.socialTitle || seo?.title || product.name,
+      description: seo?.socialDescription || seo?.description || product.description,
+      ...(seo?.socialImage ? { images: [seo.socialImage] } : {}),
+    },
+  };
 }
 
 export default async function ProductPage({ params }: Props) {
-  const product = getProduct((await params).slug);
+  const slug = (await params).slug;
+  const records = await getCms();
+  const record = records.find((item) => item.kind === "products" && item.slug === slug);
+  const catalog = records.length
+    ? records.filter((item) => item.kind === "products").map((item) => toProduct(item, records))
+    : CATALOG;
+  const product = catalog.find((item) => item.id === slug);
   if (!product) notFound();
   const { bundle } = product;
-  const otherProducts = CATALOG.filter(({ id }) => id !== product.id);
+  const otherProducts = catalog.filter(({ id }) => id !== product.id);
   const sameBrand = product.brand
     ? otherProducts.filter(({ brand }) => brand === product.brand).slice(0, 3)
     : [];
@@ -45,7 +73,11 @@ export default async function ProductPage({ params }: Props) {
       <div className="mt-2 grid items-start gap-5 sm:mt-6 sm:gap-8 lg:grid-cols-2 lg:gap-16">
         <Image
           src={product.image}
-          alt={product.name}
+          alt={
+            product.cmsImages?.[0]?.decorative ? "" : product.cmsImages?.[0]?.alt || product.name
+          }
+          width={1200}
+          height={1200}
           sizes="(min-width: 1280px) 585px, (min-width: 1024px) 50vw, 100vw"
           loading="eager"
           fetchPriority="high"
@@ -80,7 +112,11 @@ export default async function ProductPage({ params }: Props) {
             </div>
           )}
           <div className="mt-5 sm:mt-8">
-            <ProductActions id={product.id} name={product.name} />
+            {product.cmsVariants?.length ? (
+              <VariantPicker product={product} />
+            ) : (
+              <ProductActions id={product.id} name={product.name} />
+            )}
           </div>
           <ul className="mt-5 space-y-2 border-t pt-4 text-sm text-muted-foreground hairline sm:mt-8 sm:space-y-3 sm:pt-5">
             <li className="flex items-center gap-3">
@@ -97,6 +133,34 @@ export default async function ProductPage({ params }: Props) {
           </ul>
         </section>
       </div>
+      {product.fullDescription && (
+        <section className={detailSection}>
+          <h2 className="font-display text-3xl font-medium">Product details</h2>
+          <DescriptionText text={product.fullDescription} />
+        </section>
+      )}
+      {product.cmsImages && product.cmsImages.length > 1 && (
+        <section className={detailSection}>
+          <h2 className="font-display text-3xl">Product gallery</h2>
+          <div className="mt-5 grid grid-cols-2 gap-4">
+            {product.cmsImages.slice(1).map((image, index) => (
+              <figure key={index}>
+                <Image
+                  src={image.url}
+                  alt={image.decorative ? "" : image.alt}
+                  width={800}
+                  height={800}
+                  className="w-full"
+                />
+                {image.caption && <figcaption className="mt-2 text-sm">{image.caption}</figcaption>}
+                {image.imageText && (
+                  <p className="mt-2 text-sm text-muted-foreground">{image.imageText}</p>
+                )}
+              </figure>
+            ))}
+          </div>
+        </section>
+      )}
       <section aria-labelledby="product-reviews-title" className={detailSection}>
         <h2 id="product-reviews-title" className="font-display text-3xl font-medium sm:text-4xl">
           Product reviews

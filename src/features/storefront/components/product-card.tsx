@@ -1,5 +1,6 @@
 "use client";
 
+import { useSectionContent } from "../cms-context";
 import Image from "next/image";
 import Link from "next/link";
 import { Heart } from "lucide-react";
@@ -17,20 +18,27 @@ export function ProductCard({
   className?: string;
   overlay?: boolean;
 }) {
+  const content = useSectionContent("product-card");
+
   const { add, wishlist, toggleWish } = useShop();
   const wished = wishlist.includes(product.id);
   const href = `/products/${product.id}`;
   const quickAdd = (
     <button
       type="button"
-      onClick={() => add(product.id)}
+      disabled={Boolean(
+        product.cmsVariants?.length && !product.cmsVariants.some((variant) => variant.stock > 0),
+      )}
+      onClick={() =>
+        add(product.cmsVariants?.find((variant) => variant.stock > 0)?.sku ?? product.id)
+      }
       className={
         overlay
           ? "absolute inset-x-2 bottom-2 min-h-11 bg-foreground/95 py-2.5 text-xs font-medium text-background transition-opacity sm:inset-x-3 sm:bottom-3 sm:min-h-0 sm:text-[10px] lg:opacity-0 lg:group-hover:opacity-100 lg:group-focus-within:opacity-100"
           : "mt-3 min-h-11 w-full border hairline py-2.5 text-xs font-medium transition-colors hover:bg-foreground hover:text-background sm:min-h-0"
       }
     >
-      Quick add
+      {content.text("text-0", "Quick add")}
     </button>
   );
 
@@ -40,7 +48,11 @@ export function ProductCard({
         <Link href={href} aria-label={`View ${product.name}`} className="block">
           <Image
             src={product.image}
-            alt={product.name}
+            width={1024}
+            height={1024}
+            alt={
+              product.cmsImages?.[0]?.decorative ? "" : product.cmsImages?.[0]?.alt || product.name
+            }
             sizes={sizes}
             className="aspect-square w-full object-cover transition-transform duration-700 group-hover:scale-105 motion-reduce:transition-none"
           />

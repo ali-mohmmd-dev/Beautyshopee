@@ -1,5 +1,6 @@
 "use client";
 
+import { useSectionContent } from "../cms-context";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CATEGORIES } from "../catalog";
@@ -28,20 +29,21 @@ const CATEGORY_ITEMS: CategoryItem[] = [
 ];
 
 export function CategorySlider() {
+  const content = useSectionContent("category-slider");
+
   const { query, setQuery } = useShop();
   const pathname = usePathname();
 
   return (
     <nav
-      aria-label="Category navigation slider"
+      aria-label={content.text("aria-label-0", "Category navigation slider")}
       className="relative z-20 w-full border-y border-white/10 bg-black text-white"
     >
       <div className="mx-auto flex max-w-7xl items-center px-2 py-1 sm:px-4">
         <div className="flex flex-1 items-center gap-2 overflow-x-auto scroll-smooth px-1 py-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {CATEGORY_ITEMS.map((item) => {
             const isActive =
-              pathname === "/products" &&
-              query.trim().toLowerCase() === item.query.toLowerCase();
+              pathname === "/products" && query.trim().toLowerCase() === item.query.toLowerCase();
 
             return (
               <Link
@@ -81,4 +83,3 @@ export function CategorySlider() {
     </nav>
   );
 }
-

@@ -1,11 +1,13 @@
 "use client";
+import { useCatalog } from "../cms-context";
 
+import { useSectionContent } from "../cms-context";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Heart, Menu, Minus, Plus, Search, ShoppingBag, Trash2, X } from "lucide-react";
-import { CATALOG, getProduct, inr } from "../catalog";
+import { CATALOG, inr } from "../catalog";
 import { STORE } from "../store-info";
 import { useShop } from "../shop-provider";
 import { cn } from "@/lib/utils";
@@ -20,21 +22,27 @@ const NAV = [
 ];
 
 export function AnnouncementBar() {
+  const content = useSectionContent("site-header");
+
   return (
     <div className="bg-foreground text-background">
       <p className="px-4 py-2 text-center text-[10px] font-light sm:text-[11px]">
-        Free delivery on orders above ₹999 · In-store testers in Tirur
+        {content.settings?.["announcement"] ??
+          content.text("text-0", "Free delivery on orders above ₹999 · In-store testers in Tirur")}
       </p>
     </div>
   );
 }
 
 export function SiteHeader() {
+  const catalog = useCatalog(CATALOG);
+  const content = useSectionContent("site-header");
+
   const { count, openCart, wishlist, toggleWish } = useShop();
   const pathname = usePathname();
   const [panel, setPanel] = useState<"menu" | "search" | "wishlist" | null>(null);
   const menuOpen = panel === "menu";
-  const wishProducts = CATALOG.filter((p) => wishlist.includes(p.id));
+  const wishProducts = catalog.filter((p) => wishlist.includes(p.id));
   const closePanel = () => setPanel(null);
 
   function togglePanel(next: NonNullable<typeof panel>) {
@@ -48,7 +56,7 @@ export function SiteHeader() {
           <div className="flex min-w-0 items-center sm:gap-4">
             <button
               className="touch-target shrink-0 lg:hidden"
-              aria-label="Menu"
+              aria-label={content.text("aria-label-1", "Menu")}
               aria-controls="mobile-navigation"
               aria-expanded={menuOpen}
               onClick={() => togglePanel("menu")}
@@ -60,13 +68,18 @@ export function SiteHeader() {
               )}
             </button>
             <Link
-              href="/"
+              href={content.text("href-2", "/")}
               onClick={closePanel}
               className="flex min-h-11 items-center"
             >
               <Image
-                src="/beauty-shoppee-logo.png"
-                alt="Beauty Shoppee"
+                src={content.settings?.["logo"]?.url || "/beauty-shoppee-logo.png"}
+
+                alt={
+                  content.settings?.["logo"]?.decorative
+                    ? ""
+                    : content.settings?.["logo"]?.alt || "Beauty Shoppee"
+                }
                 width={1036}
                 height={1014}
                 sizes="(min-width: 640px) 66px, 58px"
@@ -76,24 +89,31 @@ export function SiteHeader() {
             </Link>
           </div>
 
-          <nav className="hidden items-center gap-8 lg:flex" aria-label="Main navigation">
-            {NAV.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                aria-current={pathname === item.href ? "page" : undefined}
-                onClick={closePanel}
-                className="text-[11px] font-medium text-foreground/70 transition-colors hover:text-foreground aria-[current=page]:text-foreground aria-[current=page]:underline aria-[current=page]:underline-offset-4"
-              >
-                {item.label}
-              </Link>
-            ))}
+          <nav
+            className="hidden items-center gap-8 lg:flex"
+            aria-label={content.text("aria-label-5", "Main navigation")}
+          >
+            {((content.settings?.["headerLinks"] as { label: string; href: string }[]) ?? NAV).map(
+              (item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  aria-current={pathname === item.href ? "page" : undefined}
+                  onClick={closePanel}
+                  className="text-[11px] font-medium text-foreground/70 transition-colors hover:text-foreground aria-[current=page]:text-foreground aria-[current=page]:underline aria-[current=page]:underline-offset-4"
+                >
+                  {item.label}
+                </Link>
+              ),
+            )}
           </nav>
 
           <div className="flex shrink-0 items-center lg:gap-5">
-            <span className="hidden text-[11px] text-muted-foreground md:block">EN · ₹ INR</span>
+            <span className="hidden text-[11px] text-muted-foreground md:block">
+              {content.text("text-6", "EN · ₹ INR")}
+            </span>
             <button
-              aria-label="Search"
+              aria-label={content.text("aria-label-7", "Search")}
               aria-expanded={panel === "search"}
               onClick={() => togglePanel("search")}
               className="max-lg:touch-target"
@@ -101,7 +121,7 @@ export function SiteHeader() {
               <Search size={18} strokeWidth={1.5} />
             </button>
             <button
-              aria-label="Wishlist"
+              aria-label={content.text("aria-label-8", "Wishlist")}
               aria-expanded={panel === "wishlist"}
               className="relative max-lg:touch-target"
               onClick={() => togglePanel("wishlist")}
@@ -114,7 +134,7 @@ export function SiteHeader() {
               )}
             </button>
             <button
-              aria-label="Cart"
+              aria-label={content.text("aria-label-9", "Cart")}
               className="relative max-lg:touch-target"
               onClick={() => {
                 closePanel();
@@ -141,7 +161,10 @@ export function SiteHeader() {
             <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
               {wishProducts.length === 0 ? (
                 <p className="text-sm text-muted-foreground">
-                  Your wishlist is empty — tap the heart on any product to save it.
+                  {content.text(
+                    "text-10",
+                    "Your wishlist is empty — tap the heart on any product to save it.",
+                  )}
                 </p>
               ) : (
                 <ul className="divide-y hairline">
@@ -179,7 +202,7 @@ export function SiteHeader() {
               ? "visible translate-y-0 opacity-100 duration-250"
               : "pointer-events-none invisible -translate-y-2 opacity-0 duration-150",
           )}
-          aria-label="Mobile navigation"
+          aria-label={content.text("aria-label-11", "Mobile navigation")}
         >
           <ul className="divide-y px-4 py-2">
             {NAV.map((item) => (
@@ -205,6 +228,8 @@ export function SiteHeader() {
 }
 
 function HeaderSearch({ onClose }: { onClose: () => void }) {
+  const content = useSectionContent("site-header");
+
   const { query, setQuery } = useShop();
   const router = useRouter();
 
@@ -212,7 +237,7 @@ function HeaderSearch({ onClose }: { onClose: () => void }) {
     <div className="border-t hairline bg-card">
       <form
         role="search"
-        aria-label="Store search"
+        aria-label={content.text("aria-label-12", "Store search")}
         onSubmit={(event) => {
           event.preventDefault();
           onClose();
@@ -224,17 +249,17 @@ function HeaderSearch({ onClose }: { onClose: () => void }) {
         <input
           autoFocus
           type="search"
-          aria-label="Search products"
+          aria-label={content.text("aria-label-13", "Search products")}
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search products"
+          placeholder={content.text("placeholder-14", "Search products")}
           className="min-h-11 min-w-0 flex-1 bg-transparent text-base placeholder:text-muted-foreground sm:min-h-0 sm:text-sm"
         />
         <button
           type="submit"
           className="min-h-11 shrink-0 bg-foreground px-3 py-2 text-xs text-background sm:min-h-0 sm:px-4"
         >
-          View results
+          {content.text("text-15", "View results")}
         </button>
       </form>
     </div>
@@ -242,6 +267,9 @@ function HeaderSearch({ onClose }: { onClose: () => void }) {
 }
 
 function CartDrawer() {
+  const catalog = useCatalog(CATALOG);
+  const content = useSectionContent("site-header");
+
   const { isOpen, closeCart, lines, setQty, remove, total, clear } = useShop();
   const [placed, setPlaced] = useState(false);
 
@@ -249,7 +277,22 @@ function CartDrawer() {
 
   const entries = lines
     .map((line) => {
-      const product = getProduct(line.id);
+      const found = catalog.find(
+        (product) =>
+          product.id === line.id || product.cmsVariants?.some((variant) => variant.sku === line.id),
+      );
+      const variant = found?.cmsVariants?.find((variant) => variant.sku === line.id);
+      const product = found
+        ? {
+            ...found,
+            price: variant?.price ?? found.price,
+            name:
+              found.name +
+              (variant?.options.length
+                ? " · " + variant.options.map((option) => option.value).join(" / ")
+                : ""),
+          }
+        : undefined;
       return product ? { line, product } : null;
     })
     .filter((e) => e !== null);
@@ -257,7 +300,11 @@ function CartDrawer() {
   const freeDeliveryGap = 999 - total;
 
   return (
-    <div className="fixed inset-0 z-50" role="dialog" aria-label="Cart">
+    <div
+      className="fixed inset-0 z-50"
+      role="dialog"
+      aria-label={content.text("aria-label-16", "Cart")}
+    >
       <div className="absolute inset-0 bg-foreground/40" onClick={closeCart} aria-hidden="true" />
       <aside
         data-lenis-prevent
@@ -265,32 +312,40 @@ function CartDrawer() {
       >
         <div className="flex shrink-0 items-center justify-between border-b px-4 py-2 hairline sm:px-6 sm:py-5">
           <p className="text-[11px] font-medium">
-            Cart ({entries.reduce((n, e) => n + e.line.qty, 0)})
+            {content.text("text-17", "Cart (")}
+            {entries.reduce((n, e) => n + e.line.qty, 0)})
           </p>
-          <button aria-label="Close cart" className="max-sm:touch-target" onClick={closeCart}>
+          <button
+            aria-label={content.text("aria-label-18", "Close cart")}
+            className="max-sm:touch-target"
+            onClick={closeCart}
+          >
             <X size={18} strokeWidth={1.5} />
           </button>
         </div>
 
         {placed ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-4 px-8 text-center">
-            <p className="font-display text-3xl">Thank you</p>
+            <p className="font-display text-3xl">{content.text("text-19", "Thank you")}</p>
             <p className="text-sm text-muted-foreground">
-              Your order has been received. We&apos;ll confirm it by phone shortly — or call the
-              store directly at {STORE.phone}.
+              {content.text(
+                "text-20",
+                "Your order has been received. We&apos;ll confirm it by phone shortly — or call the store directly at",
+              )}
+              {content.settings?.["phone"] ?? STORE.phone}.
             </p>
             <button
               onClick={closeCart}
               className="mt-2 border px-6 py-3 text-[11px] font-medium hairline hover:bg-accent"
             >
-              Continue shopping
+              {content.text("text-21", "Continue shopping")}
             </button>
           </div>
         ) : entries.length === 0 ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-3 px-8 text-center">
             <ShoppingBag size={28} strokeWidth={1} className="text-muted-foreground" />
             <p className="text-sm text-muted-foreground">
-              Your cart is empty. Add something beautiful.
+              {content.text("text-22", "Your cart is empty. Add something beautiful.")}
             </p>
           </div>
         ) : (
@@ -314,7 +369,7 @@ function CartDrawer() {
                     <div className="mt-auto flex items-center justify-between pt-3">
                       <div className="flex items-center border hairline">
                         <button
-                          aria-label="Decrease quantity"
+                          aria-label={content.text("aria-label-23", "Decrease quantity")}
                           className="p-1.5 max-sm:touch-target"
                           onClick={() => setQty(line.id, line.qty - 1)}
                         >
@@ -322,7 +377,7 @@ function CartDrawer() {
                         </button>
                         <span className="w-8 text-center text-xs">{line.qty}</span>
                         <button
-                          aria-label="Increase quantity"
+                          aria-label={content.text("aria-label-24", "Increase quantity")}
                           className="p-1.5 max-sm:touch-target"
                           onClick={() => setQty(line.id, line.qty + 1)}
                         >
@@ -343,7 +398,9 @@ function CartDrawer() {
             </ul>
             <div className="shrink-0 border-t px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] hairline sm:px-6 sm:py-6">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] text-muted-foreground">Subtotal</span>
+                <span className="text-[11px] text-muted-foreground">
+                  {content.text("text-25", "Subtotal")}
+                </span>
                 <span className="font-display text-2xl">{inr(total)}</span>
               </div>
               <p className="mt-2 text-xs text-muted-foreground">
@@ -358,10 +415,10 @@ function CartDrawer() {
                 }}
                 className="mt-3 min-h-11 w-full bg-foreground py-3.5 text-xs font-medium text-background transition-opacity hover:opacity-85 sm:mt-4"
               >
-                Place order · pay at store
+                {content.text("text-26", "Place order · pay at store")}
               </button>
               <p className="mt-3 text-center text-[11px] text-muted-foreground">
-                Reserve online, pay on pickup or delivery in Tirur.
+                {content.text("text-27", "Reserve online, pay on pickup or delivery in Tirur.")}
               </p>
             </div>
           </>

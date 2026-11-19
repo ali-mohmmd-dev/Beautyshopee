@@ -1,3 +1,4 @@
+import { cmsMetadata } from "@/lib/cms";
 import type { Metadata } from "next";
 import { BrandPillars } from "@/features/storefront/components/brand-pillars";
 import { BundleShowcase } from "@/features/storefront/components/bundle-showcase";
@@ -12,7 +13,7 @@ import { VisitSection } from "@/features/storefront/components/visit-section";
 
 const title = "Beauty Shoppee Tirur — Premium Cosmetics Store";
 
-export const metadata: Metadata = {
+const fallbackMetadata: Metadata = {
   title: { absolute: title },
   description:
     "Tirur's trusted cosmetics store — authentic beauty brands, in-store testers and everyday offers. 1st Floor, New Bus Stand Building, Tirur, Kerala 676101. Rated 4.5 by 153 customers.",
@@ -44,4 +45,8 @@ export default function HomePage() {
       <VisitSection />
     </>
   );
+}
+
+export async function generateMetadata() {
+  return cmsMetadata("home", fallbackMetadata);
 }

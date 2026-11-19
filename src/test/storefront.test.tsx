@@ -6,6 +6,10 @@ import ProductPage from "@/app/products/[slug]/page";
 import { StorefrontShell } from "@/features/storefront/components/storefront-shell";
 
 // Vitest loads JPEGs as URLs. Next.js supplies dimensions and image optimization.
+vi.mock("@/lib/cms", () => ({
+  getCms: async () => [],
+  cmsMetadata: async (_slug: string, fallback: unknown) => fallback,
+}));
 vi.mock("next/image", () => ({ default: () => null }));
 
 describe("Storefront home page", () => {
@@ -55,6 +59,25 @@ describe("Product pages", () => {
 
     const cart = within(screen.getByRole("dialog", { name: "Cart" }));
     expect(cart.getByText("Cart (2)")).toBeInTheDocument();
+  });
+
+  it("does not filter the home page featured section when clicking a header category", () => {
+    render(
+      <StorefrontShell>
+        <HomePage />
+      </StorefrontShell>,
+    );
+
+    const nav = screen.getByRole("navigation", { name: "Category navigation slider" });
+    fireEvent.click(within(nav).getByRole("link", { name: /Lips/i }));
+
+    const featured = document.getElementById("featured");
+    if (!featured) throw new Error("Expected #featured section on home page");
+    expect(
+      within(featured).getByRole("heading", { name: "Featured this week" }),
+    ).toBeInTheDocument();
+    expect(within(featured).getByRole("heading", { name: "Blush Collection" })).toBeInTheDocument();
+    expect(within(featured).getByRole("heading", { name: "Silk Lip Oil" })).toBeInTheDocument();
   });
 
   it("filters products when clicking a category slider link", () => {

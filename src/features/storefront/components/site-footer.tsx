@@ -1,3 +1,6 @@
+"use client";
+
+import { useSectionContent } from "../cms-context";
 import Image from "next/image";
 import { FooterContent } from "./footer-content";
 import Link from "next/link";
@@ -31,13 +34,22 @@ const LINKS = [
 ];
 
 export function SiteFooter() {
+  const content = useSectionContent("site-footer");
+
   return (
     <footer className="bg-background">
       <div className="grid grid-cols-4 sm:grid-cols-8">
-        {STRIP.map((thumb) => (
+        {(
+          content.settings?.["footerImages"]?.map((image: any) => ({
+            src: image.url,
+            alt: image.decorative ? "" : image.alt,
+          })) ?? STRIP
+        ).map((thumb: { src: any; alt: string }) => (
           <Image
             key={thumb.alt}
             src={thumb.src}
+            width={400}
+            height={400}
             alt={thumb.alt}
             sizes="(min-width: 640px) 12.5vw, 25vw"
             className="aspect-square w-full object-cover"
@@ -47,36 +59,50 @@ export function SiteFooter() {
 
       <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-4 gap-y-7 px-4 py-8 sm:gap-x-12 sm:px-6 sm:py-16 md:grid-cols-4 lg:py-20">
         <div className="max-md:col-span-2">
-          <h3 className="text-[11px] font-semibold">Beauty letter</h3>
+          <h3 className="text-[11px] font-semibold">
+            {content.settings?.["newsletterHeading"] ?? content.text("text-0", "Beauty letter")}
+          </h3>
           <p className="mt-4 text-sm font-light leading-[1.4] text-muted-foreground">
-            New arrivals, offers and restocks — straight to your inbox.
+            {content.settings?.["newsletterText"] ??
+              content.text("text-1", "New arrivals, offers and restocks — straight to your inbox.")}
           </p>
           <NewsletterForm />
         </div>
 
         <div>
-          <h3 className="text-[11px] font-semibold">Store & contact</h3>
+          <h3 className="text-[11px] font-semibold">{content.text("text-2", "Store & contact")}</h3>
           <address className="mt-4 text-sm font-light not-italic leading-[1.4] text-muted-foreground">
-            {STORE.address}
+            {content.settings?.["address"] ?? STORE.address}
           </address>
-          <a href={STORE.phoneHref} className="mt-3 block text-sm hover:text-muted-foreground">
-            {STORE.phone}
-          </a>
-          <p className="mt-1 text-sm font-light text-muted-foreground">{STORE.hours}</p>
           <a
-            href={STORE.directions}
+            href={
+              content.settings?.["phone"]
+                ? "tel:" + content.settings["phone"].replace(/[^+0-9]/g, "")
+                : STORE.phoneHref
+            }
+            className="mt-3 block text-sm hover:text-muted-foreground"
+          >
+            {content.settings?.["phone"] ?? STORE.phone}
+          </a>
+          <p className="mt-1 text-sm font-light text-muted-foreground">
+            {content.settings?.["hours"] ?? STORE.hours}
+          </p>
+          <a
+            href={content.settings?.["directions"] ?? STORE.directions}
             target="_blank"
             rel="noreferrer"
             className="mt-3 inline-block text-[11px] underline underline-offset-4"
           >
-            Get directions
+            {content.text("text-3", "Get directions")}
           </a>
         </div>
 
         <div>
-          <h3 className="text-[11px] font-semibold">Explore</h3>
+          <h3 className="text-[11px] font-semibold">{content.text("text-4", "Explore")}</h3>
           <ul className="mt-2 text-sm sm:mt-4 sm:space-y-3 font-light text-muted-foreground">
-            {LINKS.map((link) => (
+            {(
+              (content.settings?.["footerLinks"] as { label: string; href: string }[]) ?? LINKS
+            ).map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
@@ -90,10 +116,15 @@ export function SiteFooter() {
         </div>
 
         <div className="max-md:col-span-2">
-          <Link href="/" className="inline-block align-top">
+          <Link href={content.text("href-5", "/")} className="inline-block align-top">
             <Image
-              src="/beauty-shoppee-logo.png"
-              alt="Beauty Shoppee"
+              src={content.settings?.["logo"]?.url || "/beauty-shoppee-logo.png"}
+
+              alt={
+                content.settings?.["logo"]?.decorative
+                  ? ""
+                  : content.settings?.["logo"]?.alt || "Beauty Shoppee"
+              }
               width={1036}
               height={1014}
               sizes="112px"
@@ -101,15 +132,20 @@ export function SiteFooter() {
             />
           </Link>
           <p className="mt-4 text-sm font-light leading-[1.4] text-muted-foreground">
-            Tirur&apos;s trusted cosmetics destination — 100% authentic products, billed with GST.
+            {content.text(
+              "text-8",
+              "Tirur&apos;s trusted cosmetics destination — 100% authentic products, billed with GST.",
+            )}
           </p>
           <p className="mt-4 text-[10px] text-muted-foreground">
-            Rated {STORE.rating} ★ · {STORE.reviewCount} reviews
+            {content.text("text-9", "Rated")}
+            {STORE.rating} ★ · {STORE.reviewCount}
+            {content.text("text-10", "reviews")}
           </p>
         </div>
         <FooterContent />
         <p className="col-span-full text-center text-[11px] text-muted-foreground">
-          © 2026 Beauty Shoppee {STORE.city} · Kerala 676101
+          {content.settings?.["copyright"] ?? "© 2026 Beauty Shoppee Tirur · Kerala 676101"}
         </p>
       </div>
     </footer>

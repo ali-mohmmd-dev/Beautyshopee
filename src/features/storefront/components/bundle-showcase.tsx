@@ -1,13 +1,26 @@
 "use client";
+import { useCms, useCatalog } from "../cms-context";
 
+import { useSectionContent } from "../cms-context";
 import Image from "next/image";
 import Link from "next/link";
 import { ParallaxImage } from "./parallax-image";
-import { BUNDLE, inr } from "../catalog";
+import { BUNDLE as FALLBACK_BUNDLE, CATALOG, inr } from "../catalog";
 import { useShop } from "../shop-provider";
 
 export function BundleShowcase() {
+  const content = useSectionContent("bundle-showcase");
+
   const { add } = useShop();
+  const records = useCms();
+  const catalog = useCatalog(CATALOG);
+  const live = catalog.find((product) => product.id === FALLBACK_BUNDLE.id);
+  const BUNDLE = records.length
+    ? live?.bundle
+      ? { ...live, bundle: live.bundle }
+      : null
+    : FALLBACK_BUNDLE;
+  if (!BUNDLE) return null;
 
   return (
     <section id="bundle" className="grid lg:grid-cols-2">
@@ -32,7 +45,10 @@ export function BundleShowcase() {
           </Link>
         </h2>
         <p className="mt-4 text-sm font-light text-muted-foreground">
-          Four everyday icons in one box — our most-loved shades, paired for a complete look.
+          {content.text(
+            "text-0",
+            "Four everyday icons in one box — our most-loved shades, paired for a complete look.",
+          )}
         </p>
 
         <ul className="mt-6 divide-y sm:mt-10 hairline border-y hairline">
@@ -60,13 +76,17 @@ export function BundleShowcase() {
 
         <div className="mt-8 flex items-end justify-between">
           <div>
-            <p className="text-[10px] text-muted-foreground">Total value</p>
+            <p className="text-[10px] text-muted-foreground">
+              {content.text("text-1", "Total value")}
+            </p>
             <p className="text-sm text-muted-foreground line-through">
               {inr(BUNDLE.bundle.compareAt)}
             </p>
           </div>
           <div className="text-right">
-            <p className="text-[10px] text-muted-foreground">Kit price</p>
+            <p className="text-[10px] text-muted-foreground">
+              {content.text("text-2", "Kit price")}
+            </p>
             <p className="font-display text-4xl">{inr(BUNDLE.price)}</p>
           </div>
         </div>
@@ -75,10 +95,10 @@ export function BundleShowcase() {
           onClick={() => add(BUNDLE.id)}
           className="mt-6 min-h-11 w-full sm:mt-8 bg-foreground py-3.5 text-xs font-medium text-background transition-opacity hover:opacity-85 sm:w-auto sm:px-12"
         >
-          Add to cart
+          {content.text("text-3", "Add to cart")}
         </button>
         <p className="mt-4 text-[11px] text-muted-foreground">
-          Free delivery above ₹999 · Testers available in store at Tirur
+          {content.text("text-4", "Free delivery above ₹999 · Testers available in store at Tirur")}
         </p>
       </div>
     </section>

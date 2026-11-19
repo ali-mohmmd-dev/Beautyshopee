@@ -1,5 +1,7 @@
 "use client";
 
+import { useCatalog, useCms } from "../cms-context";
+import { useSectionContent } from "../cms-context";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
@@ -8,6 +10,8 @@ import { useShop } from "../shop-provider";
 import { ProductCard } from "./product-card";
 
 export function ProductListing() {
+  const content = useSectionContent("product-listing");
+
   const { query, setQuery } = useShop();
   const searchParams = useSearchParams();
   const urlQuery = searchParams?.get("q") ?? null;
@@ -18,7 +22,8 @@ export function ProductListing() {
     }
   }, [urlQuery, setQuery]);
 
-  const products = searchProducts(CATALOG, query);
+  const catalog = useCatalog(CATALOG);
+  const products = searchProducts(catalog, query);
 
   return (
     <section
@@ -28,7 +33,7 @@ export function ProductListing() {
       <div className="flex flex-wrap items-end justify-between gap-4 border-b hairline pb-4 sm:gap-6 sm:pb-6">
         <div>
           <h1 id="catalog-title" className="font-display text-3xl font-medium">
-            Shop the products
+            {content.text("text-0", "Shop the products")}
           </h1>
           <p role="status" className="mt-2 text-xs text-muted-foreground">
             {products.length} {products.length === 1 ? "product" : "products"}
@@ -38,10 +43,10 @@ export function ProductListing() {
           <Search size={16} aria-hidden="true" />
           <input
             type="search"
-            aria-label="Filter products"
+            aria-label={content.text("aria-label-1", "Filter products")}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search the collection"
+            placeholder={content.text("placeholder-2", "Search the collection")}
             className="min-w-0 flex-1 bg-transparent py-3 text-base sm:text-sm"
           />
         </div>
@@ -58,13 +63,16 @@ export function ProductListing() {
         </div>
       ) : (
         <div className="py-16 text-center">
-          <p className="text-sm text-muted-foreground">No products match “{query.trim()}”.</p>
+          <p className="text-sm text-muted-foreground">
+            {content.text("text-3", "No products match “")}
+            {query.trim()}”.
+          </p>
           <button
             type="button"
             onClick={() => setQuery("")}
             className="mt-4 min-h-11 px-3 text-sm underline underline-offset-4"
           >
-            Clear search
+            {content.text("text-4", "Clear search")}
           </button>
         </div>
       )}

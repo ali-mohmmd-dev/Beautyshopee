@@ -1,7 +1,8 @@
 "use client";
+import { useCatalog } from "./cms-context";
 
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
-import { getProduct } from "./catalog";
+import { CATALOG } from "./catalog";
 
 export type CartLine = { id: string; qty: number };
 
@@ -25,6 +26,7 @@ type ShopState = {
 const ShopContext = createContext<ShopState | null>(null);
 
 export function ShopProvider({ children }: { children: ReactNode }) {
+  const catalog = useCatalog(CATALOG);
   const [lines, setLines] = useState<CartLine[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [wishlist, setWishlist] = useState<string[]>([]);
@@ -62,13 +64,17 @@ export function ShopProvider({ children }: { children: ReactNode }) {
     let count = 0;
     let total = 0;
     for (const line of lines) {
-      const product = getProduct(line.id);
+      const product = catalog.find(
+        (product) =>
+          product.id === line.id || product.cmsVariants?.some((variant) => variant.sku === line.id),
+      );
       if (!product) continue;
       count += line.qty;
-      total += product.price * line.qty;
+      const variant = product.cmsVariants?.find((variant) => variant.sku === line.id);
+      total += (variant?.price ?? product.price) * line.qty;
     }
     return { count, total };
-  }, [lines]);
+  }, [lines, catalog]);
 
   const value = useMemo<ShopState>(
     () => ({

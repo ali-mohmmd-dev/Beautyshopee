@@ -1,3 +1,6 @@
+"use client";
+
+import { useSectionContent } from "../cms-context";
 import { MapPin, ShoppingBag, Star, Truck } from "lucide-react";
 import { STORE } from "../store-info";
 
@@ -21,10 +24,17 @@ const PILLARS = [
 ];
 
 export function BrandPillars() {
+  const content = useSectionContent("brand-pillars");
+
   return (
     <section className="bg-background py-10 sm:pt-6 sm:pt-20 lg:pt-28">
       <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-4 gap-y-6 px-4 sm:gap-0 sm:p-0 lg:grid-cols-4">
-        {PILLARS.map((pillar) => (
+        {(
+          content.items(
+            "items",
+            PILLARS.map((item) => ({ title: item.title, text: item.text })),
+          ) as { title: string; text: string }[]
+        ).map((pillar) => (
           <div key={pillar.title} className="">
             <div className="border-l pl-3 hairline sm:px-8">
               <h3 className="text-sm font-semibold sm:mt-4 sm:text-xs">{pillar.title}</h3>
@@ -40,28 +50,32 @@ export function BrandPillars() {
 }
 
 export function OffersBand() {
+  const content = useSectionContent("brand-pillars");
+
   return (
     <aside
       id="offers"
-      aria-label="Shopping information"
+      aria-label={content.text("aria-label-0", "Shopping information")}
       className="border-b hairline bg-background"
     >
       <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-4 text-xs text-foreground/80 sm:px-6">
         <span className="flex items-center gap-2">
           <ShoppingBag size={14} className="text-foreground" aria-hidden="true" />
-          In-store shopping & testers
+          {content.text("text-1", "In-store shopping & testers")}
         </span>
         <span className="flex items-center gap-2">
           <Truck size={14} className="text-foreground" aria-hidden="true" />
-          Delivery available · Free above ₹999
+          {content.text("text-2", "Delivery available · Free above ₹999")}
         </span>
         <span className="flex items-center gap-2">
           <MapPin size={14} className="text-foreground" aria-hidden="true" />
-          1st Floor, New Bus Stand, {STORE.city}
+          {content.text("text-3", "1st Floor, New Bus Stand,")}
+          {STORE.city}
         </span>
         <span className="flex items-center gap-1.5 font-medium text-foreground">
           <Star size={13} className="fill-foreground text-foreground" aria-hidden="true" />
-          {STORE.rating} ({STORE.reviewCount} reviews)
+          {STORE.rating} ({STORE.reviewCount}
+          {content.text("text-4", "reviews)")}
         </span>
       </div>
     </aside>

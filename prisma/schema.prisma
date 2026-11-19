@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+model Content {
+  id String @id @default(cuid())
+  kind String
+  slug String
+  title String
+  draft Json
+  published Json?
+  version Int @default(1)
+  publishedAt DateTime?
+  archivedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  revisions Revision[]
+  @@unique([kind, slug])
+  @@index([kind, archivedAt])
+}
+model Revision {
+  id String @id @default(cuid())
+  contentId String
+  content Content @relation(fields: [contentId], references: [id])
+  version Int
+  action String
+  data Json
+  createdAt DateTime @default(now())
+  @@unique([contentId, version])
+}
+model Media {
+  id String @id @default(cuid())
+  key String @unique
+  url String
+  filename String
+  contentType String
+  size Int
+  alt String @default("")
+  caption String @default("")
+  imageText String @default("")
+  decorative Boolean @default(false)
+  createdAt DateTime @default(now())
+}
+model LoginAttempt {
+  key String @id
+  failures Int @default(0)
+  resetAt DateTime
+}

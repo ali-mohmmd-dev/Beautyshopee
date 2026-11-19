@@ -33,7 +33,25 @@ export type Product = {
   reviews?: readonly ProductReview[];
   description: string;
   price: number;
-  image: StaticImageData;
+  image: StaticImageData | string;
+  fullDescription?: string;
+  cmsImages?: {
+    url: string;
+    alt: string;
+    caption: string;
+    imageText: string;
+    decorative: boolean;
+  }[];
+  cmsVariants?: {
+    sku: string;
+    options: { name: string; value: string }[];
+    price: number;
+    compareAt: number | null;
+    stock: number;
+    netQuantity: number | null;
+    unit: string;
+    image: { url: string; alt: string };
+  }[];
   bundle?: {
     compareAt: number;
     items: { name: string; shade: string; price: number; image: StaticImageData }[];
