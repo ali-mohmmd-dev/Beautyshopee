@@ -14,6 +14,19 @@ export function toProduct(record: CmsRecord, records: CmsRecord[]): Product {
     price: first?.price ?? 0,
     image: data["images"]?.[0]?.url ?? "",
     brand: brand?.data["name"],
+    featured: Boolean(data["featured"]),
+    qualityType: data["qualityType"] ?? "",
+    company:
+      records.find((r) => r.id === (data["companyId"] || brand?.data["companyId"]))?.data["name"] ??
+      "",
+    concerns: records
+      .filter(
+        (r) =>
+          r.kind === "concerns" &&
+          r.data["enabled"] !== false &&
+          data["concernIds"]?.includes(r.id),
+      )
+      .map((r) => ({ slug: r.slug, name: r.data["name"] })),
     sampleBrand: brand?.data["sample"],
     sampleProduct: data["sample"],
     categories: records

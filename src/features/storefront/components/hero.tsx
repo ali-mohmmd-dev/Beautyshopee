@@ -1,71 +1,90 @@
 "use client";
 
-import { useSectionContent } from "../cms-context";
-import Image from "next/image";
-import Link from "next/link";
-import { ArrowDownRight } from "lucide-react";
-import portraitImg from "@/assets/hero-portrait.jpg";
-import { ParallaxImage } from "./parallax-image";
-import { STORE } from "../store-info";
+import { getImageProps } from "next/image";
+import { useEffect, useRef } from "react";
+import heroBanner from "@/assets/hero-banner-4k.webp";
+import mobileHeroBanner from "@/assets/hero-banner-mobile.webp";
+import { useCms, useSectionContent } from "../cms-context";
 
 export function Hero() {
+  const viewport = useRef<HTMLElement>(null);
+  const artwork = useRef<HTMLPictureElement>(null);
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let frame = 0;
+    function update() {
+      frame = 0;
+      const section = viewport.current;
+      const image = artwork.current;
+      if (!section || !image) return;
+      if (!desktop.matches || reduced.matches) {
+        image.style.removeProperty("transform");
+        return;
+      }
+      const bounds = section.getBoundingClientRect();
+      // The extra image height covers the full bounded travel, including restored scroll positions.
+      const offset = Math.max(-32, Math.min(32, -bounds.top * 0.12));
+      image.style.transform = "translate3d(0, " + offset + "px, 0)";
+    }
+    function schedule() {
+      if (!frame) frame = requestAnimationFrame(update);
+    }
+    update();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    desktop.addEventListener("change", schedule);
+    reduced.addEventListener("change", schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      desktop.removeEventListener("change", schedule);
+      reduced.removeEventListener("change", schedule);
+    };
+  }, []);
   const content = useSectionContent("hero");
-
+  const home = useCms().find((record) => record.kind === "pages" && record.data["path"] === "/");
+  const banner = home?.data["heroBanner"];
+  const alt =
+    banner?.desktopImage?.alt ||
+    banner?.mobileImage?.alt ||
+    content.text(
+      "banner-alt",
+      "Tropical Charm Beauty Duo — 20% off selected products at Beauty Shoppee Tirur.",
+    );
+  const common = {
+    alt,
+    sizes: "100vw",
+    quality: 90,
+    loading: "eager" as const,
+    fetchPriority: "high" as const,
+  };
+  const { props: desktop } = getImageProps({
+    ...common,
+    src: banner?.desktopImage?.url || content.image("banner", heroBanner),
+    width: heroBanner.width,
+    height: heroBanner.height,
+  });
+  const { props: mobile } = getImageProps({
+    ...common,
+    src: banner?.mobileImage?.url || mobileHeroBanner,
+    width: mobileHeroBanner.width,
+    height: mobileHeroBanner.height,
+  });
   return (
-    <section className="grid lg:h-[620px] lg:grid-cols-2">
-      <div className="relative flex min-h-[clamp(22rem,58svh,30rem)] items-end overflow-hidden sm:min-h-[max(22rem,65svh)] lg:h-[620px] lg:min-h-0">
-        <ParallaxImage className="absolute inset-0 h-full w-full" speed={0.1}>
-          <Image
-            src={content.image("image-0", portraitImg)}
-            alt={content.text("alt-1", "Editorial beauty portrait — Beauty Shoppee Tirur")}
-            fill
-            priority
-            sizes="(min-width: 1024px) 50vw, 100vw"
-            className="object-cover"
-          />
-        </ParallaxImage>
-        <div className="absolute inset-0 bg-gradient-to-t from-foreground/75 via-foreground/10 to-transparent" />
-        <div className="relative w-full p-5 pb-7 text-background sm:p-12 lg:absolute lg:inset-x-0 lg:bottom-50 lg:translate-y-[20%]">
-          <h1 className="font-display text-[clamp(2.5rem,11vw,3rem)] font-medium leading-[0.95] sm:text-6xl lg:text-7xl">
-            {content.text("text-2", "Beauty worth")}
-            <br />
-            {content.text("text-3", "discovering.")}
-          </h1>
-          <p className="mt-3 max-w-sm text-sm font-light leading-[1.4] text-background/85 sm:mt-5">
-            {STORE.city}
-            {content.text(
-              "text-4",
-              ", Kerala — authentic beauty brands, shade testers in store and everyday offers, curated for every skin tone.",
-            )}
-          </p>
-          <Link
-            href={content.text("href-5", "/products")}
-            className="mt-4 inline-flex min-h-11 items-center gap-2 bg-background px-5 py-3 text-sm font-medium text-foreground transition-all duration-300 hover:bg-background/90 sm:mt-6 sm:min-h-0 sm:px-6 sm:text-xs"
-          >
-            {content.text("text-6", "Explore the products")}
-            <ArrowDownRight size={14} aria-hidden="true" />
-          </Link>
-        </div>
-      </div>
-      <div className="relative hidden overflow-hidden bg-secondary lg:block lg:h-[620px]">
-        <ParallaxImage className="absolute inset-0 h-full w-full" speed={0.1}>
-          <Image
-            src={content.image(
-              "src-7",
-              "https://images.unsplash.com/photo-1718490953028-021d352b14fd?auto=format&fit=crop&w=1200&q=80",
-            )}
-            alt={content.text("alt-8", "Luxury cosmetics collection")}
-            fill
-            sizes="50vw"
-            className="object-cover"
-          />
-        </ParallaxImage>
-        <p className="absolute bottom-8 right-8 text-right text-[11px] font-light text-foreground/70">
-          {content.text("text-9", "The collection")}
-          <br />
-          {content.text("text-10", "New arrivals in store")}
-        </p>
-      </div>
+    <section ref={viewport} aria-label="Beauty Shoppee Tirur" className="hero-viewport w-full">
+      <h1 className="sr-only">Beauty Shoppee Tirur — Tropical Charm beauty offers.</h1>
+      <picture ref={artwork} className="hero-artwork">
+        <source
+          media="(min-width: 768px)"
+          srcSet={desktop.srcSet}
+          sizes={desktop.sizes}
+          width={heroBanner.width}
+          height={heroBanner.height}
+        />
+        <img {...mobile} className="hero-image" />
+      </picture>
     </section>
   );
 }

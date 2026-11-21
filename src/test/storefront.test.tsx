@@ -10,7 +10,12 @@ vi.mock("@/lib/cms", () => ({
   getCms: async () => [],
   cmsMetadata: async (_slug: string, fallback: unknown) => fallback,
 }));
-vi.mock("next/image", () => ({ default: () => null }));
+vi.mock("next/image", () => ({
+  default: () => null,
+  getImageProps: ({ src, ...props }: any) => ({
+    props: { ...props, src: typeof src === "string" ? src : src.src },
+  }),
+}));
 
 describe("Storefront home page", () => {
   it("renders the storefront and adds a featured product to the cart", () => {
@@ -20,7 +25,7 @@ describe("Storefront home page", () => {
       </StorefrontShell>,
     );
 
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Beauty worth");
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Beauty Shoppee Tirur");
     const product = screen.getByRole("heading", { name: "Blush Collection" }).closest("article");
     if (!product) throw new Error("Expected a product card for Blush Collection");
     fireEvent.click(within(product).getByRole("button", { name: "Quick add" }));

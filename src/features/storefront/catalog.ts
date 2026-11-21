@@ -1,15 +1,18 @@
+import roseStockImg from "@/assets/products-pink/rose-cloud-blush.webp";
+import berryStockImg from "@/assets/products-pink/berry-glaze-lip-tint.webp";
+import mascaraStockImg from "@/assets/products-pink/soft-definition-mascara.webp";
 import type { StaticImageData } from "next/image";
 
-import blushImg from "@/assets/product-blush.jpg";
+import blushImg from "@/assets/products-pink/blush-collection.webp";
 import eyesImg from "@/assets/cat-eyes.jpg";
 import faceImg from "@/assets/cat-face.jpg";
 import lipsImg from "@/assets/cat-lips.jpg";
 import lookImg from "@/assets/cat-looks.jpg";
-import bundleImg from "@/assets/bundle.jpg";
-import mustImg from "@/assets/product-must.jpg";
+import bundleImg from "@/assets/products-pink/essentials-kit.webp";
+import mustImg from "@/assets/products-pink/must-haves.webp";
 import nailsImg from "@/assets/cat-nails.jpg";
-import trioImg from "@/assets/product-trio.jpg";
-import lipOilImg from "@/assets/product-lip.jpg";
+import trioImg from "@/assets/products-pink/everyday-trio.webp";
+import lipOilImg from "@/assets/products-pink/silk-lip-oil.webp";
 
 export type ProductReview = {
   id: string;
@@ -27,6 +30,10 @@ export type Product = {
   tag: "NEW" | "BESTSELLER" | null;
   code: string;
   brand?: string;
+  featured?: boolean;
+  qualityType?: string;
+  company?: string;
+  concerns?: { slug: string; name: string }[];
   sampleBrand?: boolean;
   sampleProduct?: boolean;
   categories: readonly ProductCategory[];
@@ -284,7 +291,7 @@ const SAMPLE_PRODUCTS: Product[] = [
         text: "I liked pairing it with a neutral lip.",
       },
     ],
-    image: faceImg,
+    image: roseStockImg,
   },
   {
     id: "berry-glaze-lip-tint",
@@ -320,7 +327,7 @@ const SAMPLE_PRODUCTS: Product[] = [
         text: "I liked it with a little balm underneath.",
       },
     ],
-    image: lipsImg,
+    image: berryStockImg,
   },
   {
     id: "soft-definition-mascara",
@@ -356,7 +363,7 @@ const SAMPLE_PRODUCTS: Product[] = [
         text: "It paired well with a simple neutral eyeshadow.",
       },
     ],
-    image: eyesImg,
+    image: mascaraStockImg,
   },
 ];
 

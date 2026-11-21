@@ -6,8 +6,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return (await getCms())
     .filter(
       (record) =>
-        ["pages", "products", "brands", "categories"].includes(record.kind) &&
-        !record.data["seo"]?.noIndex,
+        ["pages", "products", "brands", "categories", "concerns"].includes(record.kind) &&
+        !record.data["seo"]?.noIndex &&
+        (record.kind !== "concerns" || record.data["enabled"] !== false),
     )
     .map((record) => ({
       url:

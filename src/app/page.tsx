@@ -1,3 +1,4 @@
+import { ShopByConcern } from "@/features/storefront/components/shop-by-concern";
 import { cmsMetadata } from "@/lib/cms";
 import type { Metadata } from "next";
 import { BrandPillars } from "@/features/storefront/components/brand-pillars";
@@ -36,6 +37,7 @@ export default function HomePage() {
       <Hero />
       {/* <CategorySlider /> */}
       <CategoryGrid />
+      <ShopByConcern />
       <ProductCarousel />
       <EditorialSpotlight />
       <PopularBrands />
