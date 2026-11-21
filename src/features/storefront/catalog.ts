@@ -15,6 +15,7 @@ import trioImg from "@/assets/products-pink/everyday-trio.webp";
 import lipOilImg from "@/assets/products-pink/silk-lip-oil.webp";
 
 export type ProductReview = {
+  date?: string;
   id: string;
   author: string;
   sample?: boolean;
@@ -41,6 +42,7 @@ export type Product = {
   description: string;
   price: number;
   image: StaticImageData | string;
+  specifications?: { name: string; value: string }[];
   fullDescription?: string;
   cmsImages?: {
     url: string;

@@ -56,8 +56,13 @@ export async function generateMetadata(): Promise<Metadata> {
   const settings = records.find(
     (record) => record.kind === "settings" && record.slug === "site",
   )?.data;
+  const storeName = settings?.["storeName"]?.trim() || title;
   return {
     ...defaultMetadata,
+    title: { default: storeName, template: `%s — ${storeName}` },
+    authors: [{ name: storeName }],
+    openGraph: { title: storeName, siteName: storeName, description, type: "website" },
+    twitter: { card: "summary_large_image", title: storeName },
     icons: {
       icon: { url: settings?.["favicon"]?.url || "/beauty-shoppee-logo.png", type: "image/png" },
     },

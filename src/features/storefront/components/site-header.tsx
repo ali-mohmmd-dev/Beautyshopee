@@ -42,6 +42,8 @@ export function SiteHeader() {
   const pathname = usePathname();
   const [panel, setPanel] = useState<"menu" | "search" | "wishlist" | null>(null);
   const menuOpen = panel === "menu";
+  const storeName = content.settings?.["storeName"]?.trim() || "Beauty Shoppee Tirur";
+  const navigation: { label: string; href: string }[] = content.settings?.["headerLinks"] ?? NAV;
   const wishProducts = catalog.filter((p) => wishlist.includes(p.id));
   const closePanel = () => setPanel(null);
 
@@ -68,6 +70,7 @@ export function SiteHeader() {
               )}
             </button>
             <Link
+              aria-label={storeName}
               href={content.text("href-2", "/")}
               onClick={closePanel}
               className="flex min-h-11 items-center"
@@ -78,7 +81,7 @@ export function SiteHeader() {
                 alt={
                   content.settings?.["logo"]?.decorative
                     ? ""
-                    : content.settings?.["logo"]?.alt || "Beauty Shoppee"
+                    : content.settings?.["logo"]?.alt || storeName
                 }
                 width={1036}
                 height={1014}
@@ -93,19 +96,17 @@ export function SiteHeader() {
             className="hidden items-center gap-8 lg:flex"
             aria-label={content.text("aria-label-5", "Main navigation")}
           >
-            {((content.settings?.["headerLinks"] as { label: string; href: string }[]) ?? NAV).map(
-              (item) => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  aria-current={pathname === item.href ? "page" : undefined}
-                  onClick={closePanel}
-                  className="text-[11px] font-medium text-foreground/70 transition-colors hover:text-foreground aria-[current=page]:text-foreground aria-[current=page]:underline aria-[current=page]:underline-offset-4"
-                >
-                  {item.label}
-                </Link>
-              ),
-            )}
+            {navigation.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                aria-current={pathname === item.href ? "page" : undefined}
+                onClick={closePanel}
+                className="text-[11px] font-medium text-foreground/70 transition-colors hover:text-foreground aria-[current=page]:text-foreground aria-[current=page]:underline aria-[current=page]:underline-offset-4"
+              >
+                {item.label}
+              </Link>
+            ))}
           </nav>
 
           <div className="flex shrink-0 items-center lg:gap-5">
@@ -205,7 +206,7 @@ export function SiteHeader() {
           aria-label={content.text("aria-label-11", "Mobile navigation")}
         >
           <ul className="divide-y px-4 py-2">
-            {NAV.map((item) => (
+            {navigation.map((item) => (
               <li key={item.label}>
                 <Link
                   href={item.href}

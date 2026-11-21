@@ -1,6 +1,8 @@
 "use client";
 
 import { useSectionContent } from "../cms-context";
+import { ReviewDate } from "./review-date";
+import { reviewNewestFirst } from "../review-date";
 import { Star } from "lucide-react";
 import type { ProductReview } from "../catalog";
 
@@ -62,7 +64,7 @@ export function ProductReviews({ reviews }: { reviews: readonly ProductReview[] 
         </ul>
       </div>
       <ul aria-label={content.text("aria-label-3", "Customer reviews")} className="grid gap-3">
-        {reviews.map(({ id, author, rating, text, sample }) => {
+        {[...reviews].sort(reviewNewestFirst).map(({ id, author, rating, text, sample, date }) => {
           const initials = author
             .trim()
             .split(/\s+/)
@@ -82,6 +84,7 @@ export function ProductReviews({ reviews }: { reviews: readonly ProductReview[] 
                   </span>
                   <div className="min-w-0">
                     <p className="break-words text-sm font-medium">{author}</p>
+                    <ReviewDate value={date} />
                     {sample && (
                       <span className="text-xs text-muted-foreground">
                         {content.text("text-4", "Sample review")}

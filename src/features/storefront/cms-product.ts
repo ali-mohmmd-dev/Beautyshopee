@@ -1,3 +1,4 @@
+import { reviewNewestFirst } from "./review-date";
 import type { Product } from "./catalog";
 import type { CmsRecord } from "./cms-context";
 export function toProduct(record: CmsRecord, records: CmsRecord[]): Product {
@@ -36,14 +37,19 @@ export function toProduct(record: CmsRecord, records: CmsRecord[]): Product {
       .filter((r) => r.kind === "reviews" && r.data["productId"] === record.id)
       .map((r) => ({
         id: r.id,
+        date: r.data["date"] || "",
         author: r.data["author"],
         rating: r.data["rating"],
         text: r.data["text"],
         sample: r.data["sample"],
-      })),
+      }))
+      .sort(reviewNewestFirst),
     cmsVariants: variants,
     cmsImages: data["images"],
     fullDescription: data["description"],
+    specifications: (data["specifications"] ?? []).filter(
+      (item: { name: string; value: string }) => item.name.trim() && item.value.trim(),
+    ),
     ...(data["bundleItems"]?.length
       ? {
           bundle: {

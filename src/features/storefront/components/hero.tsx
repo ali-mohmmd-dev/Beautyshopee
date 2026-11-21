@@ -44,6 +44,7 @@ export function Hero() {
     };
   }, []);
   const content = useSectionContent("hero");
+  const storeName = content.settings?.["storeName"]?.trim() || "Beauty Shoppee Tirur";
   const home = useCms().find((record) => record.kind === "pages" && record.data["path"] === "/");
   const banner = home?.data["heroBanner"];
   const alt =
@@ -73,8 +74,8 @@ export function Hero() {
     height: mobileHeroBanner.height,
   });
   return (
-    <section ref={viewport} aria-label="Beauty Shoppee Tirur" className="hero-viewport w-full">
-      <h1 className="sr-only">Beauty Shoppee Tirur — Tropical Charm beauty offers.</h1>
+    <section ref={viewport} aria-label={storeName} className="hero-viewport w-full">
+      <h1 className="sr-only">{storeName} — Tropical Charm beauty offers.</h1>
       <picture ref={artwork} className="hero-artwork">
         <source
           media="(min-width: 768px)"

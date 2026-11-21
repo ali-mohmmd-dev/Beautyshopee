@@ -177,23 +177,23 @@ export function ProductListing() {
           />
         </div>
       </div>
-      <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+      <div className="mt-5 flex flex-nowrap items-center justify-between gap-2 sm:flex-wrap sm:gap-3">
         <button
           type="button"
           onClick={() => setOpen(!open)}
           aria-expanded={open}
           aria-controls="catalog-filters"
-          className="inline-flex min-h-11 items-center gap-2 border px-4 text-sm hairline lg:hidden"
+          className="inline-flex min-h-11 shrink-0 items-center gap-2 whitespace-nowrap border px-3 text-sm hairline sm:px-4 lg:hidden"
         >
           <SlidersHorizontal size={16} aria-hidden="true" />
           Filters{active.length > 0 ? " (" + active.length + ")" : ""}
         </button>
-        <label className="ml-auto flex min-h-11 items-center gap-2 text-sm">
-          Sort by
+        <label className="ml-auto flex min-h-11 min-w-0 flex-1 items-center gap-1.5 whitespace-nowrap text-xs sm:flex-none sm:gap-2 sm:text-sm">
+          <span className="shrink-0">Sort by</span>
           <select
             value={params.get("sort") ?? "featured"}
             onChange={(e) => change("sort", e.target.value)}
-            className="min-h-11 max-w-48 border bg-background px-2 text-sm hairline"
+            className="min-h-11 w-0 min-w-0 max-w-48 flex-1 border bg-background px-2 text-sm hairline sm:w-auto sm:flex-none"
           >
             {sortOptions.map(([value, label]) => (
               <option key={value} value={value}>

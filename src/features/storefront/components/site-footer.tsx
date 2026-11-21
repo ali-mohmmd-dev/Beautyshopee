@@ -35,6 +35,7 @@ const LINKS = [
 
 export function SiteFooter() {
   const content = useSectionContent("site-footer");
+  const storeName = content.settings?.["storeName"]?.trim() || "Beauty Shoppee Tirur";
 
   return (
     <footer className="bg-background">
@@ -71,6 +72,7 @@ export function SiteFooter() {
 
         <div>
           <h3 className="text-[11px] font-semibold">{content.text("text-2", "Store & contact")}</h3>
+          <p className="mt-3 text-sm font-medium">{storeName}</p>
           <address className="mt-4 text-sm font-light not-italic leading-[1.4] text-muted-foreground">
             {content.settings?.["address"] ?? STORE.address}
           </address>
@@ -123,7 +125,7 @@ export function SiteFooter() {
               alt={
                 content.settings?.["logo"]?.decorative
                   ? ""
-                  : content.settings?.["logo"]?.alt || "Beauty Shoppee"
+                  : content.settings?.["logo"]?.alt || storeName
               }
               width={1036}
               height={1014}
@@ -145,7 +147,8 @@ export function SiteFooter() {
         </div>
         <FooterContent />
         <p className="col-span-full text-center text-[11px] text-muted-foreground">
-          {content.settings?.["copyright"] ?? "© 2026 Beauty Shoppee Tirur · Kerala 676101"}
+          {content.settings?.["copyright"] ||
+            "© " + new Date().getFullYear() + " " + storeName + " · Kerala 676101"}
         </p>
       </div>
     </footer>

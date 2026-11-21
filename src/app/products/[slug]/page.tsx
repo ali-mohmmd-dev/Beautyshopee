@@ -133,6 +133,29 @@ export default async function ProductPage({ params }: Props) {
           </ul>
         </section>
       </div>
+      {!!product.specifications?.length && (
+        <section className={detailSection} aria-labelledby="product-specifications-title">
+          <h2
+            id="product-specifications-title"
+            className="font-display text-3xl font-medium sm:text-4xl"
+          >
+            Specifications
+          </h2>
+          <dl className="mt-5 divide-y hairline">
+            {product.specifications.map((item, index) => (
+              <div
+                key={index}
+                className="grid gap-2 py-4 sm:grid-cols-[minmax(140px,1fr)_3fr] sm:gap-6"
+              >
+                <dt className="text-sm font-medium">{item.name}</dt>
+                <dd className="min-w-0 whitespace-pre-line break-words text-sm text-muted-foreground">
+                  {item.value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )}
       {product.fullDescription && (
         <section className={detailSection}>
           <h2 className="font-display text-3xl font-medium">Product details</h2>

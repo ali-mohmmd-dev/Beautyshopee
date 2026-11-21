@@ -302,3 +302,31 @@
     padding-top: 20px;
   }
 }
+
+/* Desktop homepage spacing keeps shopping sections closer together. */
+@media (min-width: 1024px) {
+  #main-content > .hero-viewport ~ #categories {
+    padding-block: 72px;
+  }
+  #main-content > .hero-viewport ~ #shop-by-concern {
+    padding-bottom: 72px;
+  }
+  #main-content > .hero-viewport ~ #featured {
+    padding-bottom: 88px;
+  }
+  #main-content > .hero-viewport ~ section[aria-label="Popular brands"] {
+    margin-block: 64px;
+  }
+  #main-content > .hero-viewport ~ #bundle + section {
+    padding-block: 72px 28px;
+  }
+  #main-content > .hero-viewport ~ #reviews > div {
+    padding-block: 36px;
+  }
+  #main-content > .hero-viewport ~ #visit > div {
+    padding-block: 40px 72px;
+  }
+  #main-content > .hero-viewport ~ #visit > div > div > div:first-child {
+    justify-content: flex-start;
+  }
+}

@@ -1,5 +1,7 @@
 "use client";
 
+import { ReviewDate } from "./review-date";
+import { reviewNewestFirst } from "../review-date";
 import { useCms } from "../cms-context";
 import { useSectionContent } from "../cms-context";
 import { REVIEWS, STORE } from "../store-info";
@@ -24,7 +26,7 @@ function ReviewCard({
   review,
   hidden = false,
 }: {
-  review: (typeof REVIEWS)[number];
+  review: (typeof REVIEWS)[number] & { date?: string };
   hidden?: boolean;
 }) {
   const content = useSectionContent("reviews");
@@ -40,6 +42,7 @@ function ReviewCard({
       </blockquote>
       <figcaption className="mt-4 sm:mt-6">
         <p className="text-sm font-medium">{review.name}</p>
+        <ReviewDate value={review.date} />
         <p className="mt-0.5 text-[11px] text-muted-foreground">{review.meta}</p>
         <span className="mt-3 inline-block border px-2.5 py-0.5 text-[9px] font-medium hairline text-muted-foreground">
           {content.text("text-0", "Verified buyer")}
@@ -54,11 +57,13 @@ export function Reviews() {
   const liveReviews = records
     .filter((record) => record.kind === "reviews" && !record.data["productId"])
     .map((record) => ({
+      date: (record.data["date"] as string) || "",
       name: record.data["author"] as string,
       stars: record.data["rating"] as number,
       text: record.data["text"] as string,
       meta: record.data["sample"] ? "Sample review" : "Customer review",
-    }));
+    }))
+    .sort(reviewNewestFirst);
   const marquee = records.length ? [...liveReviews, ...liveReviews] : MARQUEE_HALF;
   const content = useSectionContent("reviews");
 
